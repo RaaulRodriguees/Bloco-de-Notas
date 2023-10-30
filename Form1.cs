@@ -2,21 +2,25 @@ namespace Bloco_de_Notas
 {
     public partial class Form1 : Form
     {
+        //Para indicar se há alguma alteração no texto
         bool alterado = false;
+        //Váriavel zoom que por padrão terá o valor 100
         int zoom = 100;
         public Form1()
         {
             InitializeComponent();
             this.Text = "";
             rchTxtBx.TextChanged += rchTxtBx_TextChanged;
-
+            //Mostra a barra de status como ativada
             barraDeStatusToolStripMenuItem.Checked = true;
         }
 
         private void atualizaPosicao()
         {
+            //Aqui iremos obter a localização da linha e coluna atual que estamos digitando
             int linha = rchTxtBx.GetLineFromCharIndex(rchTxtBx.SelectionStart);
             int coluna = rchTxtBx.SelectionStart - rchTxtBx.GetFirstCharIndexFromLine(linha);
+            //E aqui será na barra de status será atualizado com essas localizações
             tlStrpSttsLblCursor.Text = "Ln: " + linha.ToString() + " Col: " + coluna.ToString();
         }
 
@@ -27,17 +31,19 @@ namespace Bloco_de_Notas
         }
 
         private void abrirToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        {   //Verifica se o texto foi alterado
             if (alterado)
             {
                 if (MessageBox.Show("Seu arquivo foi alterado. Deseja salvar?", "Bloco de Notas", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
+                    //Verifica se o nome do arquivo não está vazio
                     if (this.Text != "")
                     {
                         this.salvar(this.Text);
                     }
                     else
                     {
+                        //Se estiver tudo ok, ele chama o salvarComo e salva o arquivo
                         this.salvarComo();
                     }
                 }
@@ -63,6 +69,7 @@ namespace Bloco_de_Notas
             {
                 try
                 {
+                    //Salva o conteúdo do RichTextBox no arquivo especificado
                     rchTxtBx.SaveFile(arquivo, RichTextBoxStreamType.RichText);
                     //Isso fará o nome da janela ser o nome do arquivo
                     this.Text = arquivo;
@@ -115,6 +122,7 @@ namespace Bloco_de_Notas
 
         private void desfazerToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Desfaz a última operação no RichTextBox
             rchTxtBx.Undo();
         }
 
@@ -122,8 +130,6 @@ namespace Bloco_de_Notas
         {
             if (rchTxtBx.SelectedRtf != "")
             {
-                //Colocar como objeto, pq como texto ele não salvará as info de cores e fonte, mas como objeto ele salva essas info
-
                 //Aqui ele vai salvar o texto recortado no Clipboard
                 Clipboard.SetDataObject(rchTxtBx.SelectedRtf);
                 //Aqui ele apagará o texto recortado do RichTextBox
@@ -142,10 +148,11 @@ namespace Bloco_de_Notas
 
         private void colarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Verifica se há um texto no Clipboard, caso tenha uma imagem ou outro tipo de arquivo não abrirá no RichTextBox
+            // Verifica se há texto no Clipboard
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text))
             {
-                rchTxtBx.SelectedText = (String)Clipboard.GetData(DataFormats.Text);
+                //Cola o texto do Clipboard no RichTextBox
+                rchTxtBx.SelectedRtf = Clipboard.GetData(DataFormats.Text) as string; 
             }
         }
 
@@ -187,14 +194,19 @@ namespace Bloco_de_Notas
 
         private void quebraAutomáticaDaLinhaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Verifica a opção da quebra de linha
             if (quebraAutomáticaDaLinhaToolStripMenuItem.CheckState == CheckState.Checked)
             {
+                //Se a quebra de linha estiver desmarcada, ela ficará desativada
                 quebraAutomáticaDaLinhaToolStripMenuItem.CheckState = CheckState.Unchecked;
+                //Desativa a quebra de linha
                 rchTxtBx.WordWrap = false;
             }
             else
             {
+                //Se a quebra de linha estiver marcada, ela ficará ativa
                 quebraAutomáticaDaLinhaToolStripMenuItem.CheckState = CheckState.Checked;
+                //Ativa a quebra de linha
                 rchTxtBx.WordWrap = true;
             }
         }
@@ -249,23 +261,28 @@ namespace Bloco_de_Notas
         {
             if (fntDlg.ShowDialog() == DialogResult.OK)
             {
+                //Abre a caixinha de fontes do VisualStudio
                 rchTxtBx.SelectionFont = fntDlg.Font;
             }
         }
 
         private void barraDeStatusToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Verifica se a barra de status está ativada ou não
             barraDeStatusToolStripMenuItem.Checked = !barraDeStatusToolStripMenuItem.Checked;
+            //Mostra ou tira a barra de status
             sttsStrp.Visible = !sttsStrp.Visible;
         }
 
         private void atualizaZoom()
         {
+            //Atualiza o nivel de zoom na barra de status
             tlStrpSttsLblZoom.Text = this.zoom.ToString() + "%";
         }
 
         private void ampliarToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Aumenta o zoom em 1
             this.zoom++;
             rchTxtBx.Font = new Font(rchTxtBx.Font.FontFamily, rchTxtBx.Font.Size + 1, rchTxtBx.Font.Style);
             this.atualizaZoom();
@@ -273,6 +290,7 @@ namespace Bloco_de_Notas
 
         private void reduzirToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Diminui o zoom em 1
             this.zoom--;
             rchTxtBx.Font = new Font(rchTxtBx.Font.FontFamily, rchTxtBx.Font.Size - 1, rchTxtBx.Font.Style);
             this.atualizaZoom();
@@ -289,6 +307,7 @@ namespace Bloco_de_Notas
         {
             if (clrDlg.ShowDialog() == DialogResult.OK)
             {
+                //Abre a caixinha de cores do VisualStudio
                 rchTxtBx.SelectionColor = clrDlg.Color;
             }
         }
@@ -305,12 +324,6 @@ namespace Bloco_de_Notas
             Localizar frm = new Localizar();
             frm.txtBxLoc.Text = rchTxtBx.SelectedText;
             frm.Show(this);
-        }
-
-        private void abrirImagemToolStripMenuItem_Click(object sender, EventArgs e, string imagePath)
-        {
-
-
         }
     }
 }

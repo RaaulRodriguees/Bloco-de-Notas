@@ -377,7 +377,7 @@
             // 
             zoomToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ampliarToolStripMenuItem, reduzirToolStripMenuItem, restaurarZoomPadrãoToolStripMenuItem });
             zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            zoomToolStripMenuItem.Size = new Size(151, 22);
+            zoomToolStripMenuItem.Size = new Size(180, 22);
             zoomToolStripMenuItem.Text = "Zoom";
             // 
             // ampliarToolStripMenuItem
@@ -409,7 +409,7 @@
             // barraDeStatusToolStripMenuItem
             // 
             barraDeStatusToolStripMenuItem.Name = "barraDeStatusToolStripMenuItem";
-            barraDeStatusToolStripMenuItem.Size = new Size(151, 22);
+            barraDeStatusToolStripMenuItem.Size = new Size(180, 22);
             barraDeStatusToolStripMenuItem.Text = "Barra de status";
             barraDeStatusToolStripMenuItem.Click += barraDeStatusToolStripMenuItem_Click;
             // 
@@ -445,7 +445,7 @@
             // 
             // opnFlDlgAbrir
             // 
-            opnFlDlgAbrir.Filter = "Arquivo de Texto (*.txt)|*.txt|Documentos de Texto (*.rtf)|*.rtf|Todos os arquivos (*.*)|*.* ";
+            opnFlDlgAbrir.Filter = "Todos os arquivos (*.*)|*.*|Arquivo de Texto (*.txt)|*.txt|Documentos de Texto (*.rtf)|*.rtf|Todas as Imagens(*.jpg;*.jpeg;*.png;*.gif;*.webp;*.ico)|*.jpg;*.jpeg;*.png;*.gif;*.webp;*.ico";
             opnFlDlgAbrir.InitialDirectory = "C:";
             opnFlDlgAbrir.Title = "Abrir arquivo";
             // 
